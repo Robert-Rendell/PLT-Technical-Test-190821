@@ -1,7 +1,7 @@
 # Getting started
-- Download Node 14 LTS
-- inside my project root folder run the following command:
-    npm i
+- Download and install Node 14 LTS
+- navigate inside my project root folder run the following command:
+  `npm i`
 
 # Running the project
   `npm start`
