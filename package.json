@@ -1,0 +1,19 @@
+{
+  "name": "robert-rendell-technical-test-190821",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine-ts \"./src/**/*.spec.ts\""
+  },
+  "author": "Robert Rendell",
+  "license": "ISC",
+  "devDependencies": {
+    "jasmine": "~3.8.0",
+    "jasmine-ts": "~0.4.0",
+    "typescript": "~4.3.5"
+  },
+  "dependencies": {
+    "ts-node": "~10.2.1"
+  }
+}
