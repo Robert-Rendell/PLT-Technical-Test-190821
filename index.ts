@@ -1,4 +1,5 @@
 import { Container } from "typedi";
+import { ResourceService } from "./src/services/resource.service";
 import { StockService } from "./src/services/stock.service";
 
 /**
@@ -7,8 +8,8 @@ import { StockService } from "./src/services/stock.service";
 const targetSku = 'LTV719449/39/39';
 
 (async () => {
-  StockService.TRANSACTIONS = "./resources/transactions.json";
-  StockService.STOCK = "./resources/stock.json";
+  ResourceService.TRANSACTIONS = "./resources/transactions.json";
+  ResourceService.STOCK = "./resources/stock.json";
 
   const stockService = Container.get(StockService);
   const stockLevel = await stockService.getStockLevel(targetSku);

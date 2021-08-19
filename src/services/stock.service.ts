@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-
 import { Service } from 'typedi';
 import { SkuDoesNotExistError } from '../errors/sku-does-not-exist';
 
@@ -8,14 +6,18 @@ import { StockLevel } from "../models/stock-level";
 import { Stock } from '../models/stock';
 import { Transaction, TransactionType } from '../models/transaction';
 import { ConfigService } from './config.service';
+import { ResourceService } from './resource.service';
 
 @Service()
 export class StockService implements IStockLevelCalculator {
-  static TRANSACTIONS = '../resources/transactions.json';
-  static STOCK = '../resources/stock.json';
+  constructor(
+    private configService: ConfigService,
+    private resourceService: ResourceService
+  ) {}
 
-  constructor(private configService: ConfigService) {}
-
+  /**
+   * Takes a SKU input and returns a StockLevel object containing the current quantity of that sku
+   */
   public async getStockLevel(sku: string): Promise<StockLevel> {
     const stockLevel: StockLevel = {
       qty: 0,
@@ -23,10 +25,8 @@ export class StockService implements IStockLevelCalculator {
     };
 
     // REQUIREMENT - must read from the `stock` and `transactions` files on each invocation (totals cannot be precomputed)
-    const initialStockRaw = fs.readFileSync(StockService.STOCK, 'utf8');
-    const transactionsRaw = fs.readFileSync(StockService.TRANSACTIONS, 'utf8');
-    // POTENTIAL IMPROVEMENT - move the two above lines to separate services
-    // POTENTIAL IMPROVEMENT - use async/await version of readFile and handle the promise
+    const initialStockRaw = this.resourceService.getTextFromFile(ResourceService.STOCK);
+    const transactionsRaw = this.resourceService.getTextFromFile(ResourceService.TRANSACTIONS);
 
     const initialStock: Stock[] = JSON.parse(initialStockRaw);
     const transactions: Transaction[] = JSON.parse(transactionsRaw);

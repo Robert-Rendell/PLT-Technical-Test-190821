@@ -2,21 +2,24 @@ import { StockLevel } from "../src/models/stock-level";
 import { ConfigService } from "../src/services/config.service";
 import { StockService } from "../src/services/stock.service";
 import { mock, instance, when, verify } from 'ts-mockito';
+import { ResourceService } from "../src/services/resource.service";
 
 describe('StockService', () => {
   let stockService: StockService;
   let dependencies: {
     mockConfigService: ConfigService,
+    mockResourceService: ResourceService,
   };
 
   beforeAll(() => {
-    StockService.TRANSACTIONS = "./resources/transactions.json";
-    StockService.STOCK = "./resources/stock.json";
+    ResourceService.TRANSACTIONS = "./resources/transactions.json";
+    ResourceService.STOCK = "./resources/stock.json";
   });
 
   const mockDependencies = () => {
     dependencies = {
       mockConfigService: mock(ConfigService),
+      mockResourceService: new ResourceService() // POSSIBLE IMPROVEMENT - mock out fully
     }
     when(dependencies.mockConfigService.featuresEnabled()).thenReturn({
       restockOnRefund: true,
@@ -27,6 +30,7 @@ describe('StockService', () => {
     mockDependencies();
     stockService = new StockService(
       instance(dependencies.mockConfigService),
+      dependencies.mockResourceService,
     );
   });
 
@@ -66,6 +70,7 @@ describe('StockService', () => {
       });
       stockService = new StockService(
         instance(dependencies.mockConfigService),
+        dependencies.mockResourceService,
       );
       /**
        * Manually checking
