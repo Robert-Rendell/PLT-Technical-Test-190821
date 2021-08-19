@@ -105,5 +105,14 @@ describe('StockService', () => {
         done();
       }
     });
+
+    it('should call featuresEnabled to check if refunds should be restocked', async () => {
+      const targetSku = 'LTV719449/39/39';
+
+      await stockService.getStockLevel(targetSku);
+
+      verify(dependencies.mockConfigService.featuresEnabled()).called();
+      expect().nothing();
+    });
   });
 });

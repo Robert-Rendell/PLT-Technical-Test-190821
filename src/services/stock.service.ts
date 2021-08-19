@@ -16,30 +16,30 @@ export class StockService implements IStockLevelCalculator {
 
   constructor(private configService: ConfigService) {}
 
-  public getStockLevel(sku: string): Promise<StockLevel> {
+  public async getStockLevel(sku: string): Promise<StockLevel> {
     const stockLevel: StockLevel = {
       qty: 0,
       sku,
     };
 
     // REQUIREMENT - must read from the `stock` and `transactions` files on each invocation (totals cannot be precomputed)
-    // POTENTIAL IMPROVEMENT - move these to separate services
-    // POTENTIAL IMPROVEMENT - use async/await for read file
     const initialStockRaw = fs.readFileSync(StockService.STOCK, 'utf8');
     const transactionsRaw = fs.readFileSync(StockService.TRANSACTIONS, 'utf8');
+    // POTENTIAL IMPROVEMENT - move the two above lines to separate services
+    // POTENTIAL IMPROVEMENT - use async/await version of readFile and handle the promise
 
     const initialStock: Stock[] = JSON.parse(initialStockRaw);
     const transactions: Transaction[] = JSON.parse(transactionsRaw);
   
-    const initialStockValue: Stock | undefined = initialStock.find((s: Stock) => s.sku === sku)
+    const initialStockForSku: Stock | undefined = initialStock.find((s: Stock) => s.sku === sku)
 
     // REQUIREMENT - must throw an error where the SKU does not exist in the `transactions.json` and `stock.json` file
     const isInTransactions = Boolean(transactions.find((t: Transaction) => t.sku === sku));
-    const isInInitialStock = Boolean(initialStockValue);
+    const isInInitialStock = Boolean(initialStockForSku);
     if (!isInInitialStock && !isInTransactions) throw new SkuDoesNotExistError(sku);
 
-    // set initial stock for product under search
-    stockLevel.qty = initialStockValue?.stock || 0;
+    // set initial stock for sku that we are looking for
+    stockLevel.qty = initialStockForSku?.stock || Stock.StartingQuantity;
   
     // assuming the transactions are in order in the transactions.json:
     transactions.forEach((t: Transaction) => {
@@ -59,6 +59,6 @@ export class StockService implements IStockLevelCalculator {
       }
     });
 
-    return Promise.resolve(stockLevel);
+    return stockLevel;
   }
 }
