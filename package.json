@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node index.ts",
     "test": "jasmine-ts \"./unit-tests/**/*.spec.ts\"",
     "lint": "eslint . --ext .ts"
   },
