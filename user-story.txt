@@ -1,0 +1,12 @@
+User story:
+- As an interviewer I want a function which is able to:
+  - return the current stock levels for a given SKU
+    (by combining the data in these two files).
+
+Requirements:
+  [ ] must match the following signature: `(sku: string) => Promise<{ sku: string, qty: number }>`.
+  [ ] must read from the `stock` and `transactions` files on each invocation (totals cannot be precomputed)
+  [ ] must throw an error where the SKU does not exist in the `transactions.json` and `stock.json` file
+  [ ] all code adequately unit tested
+  [ ] Transactions may exist for SKUs which are not present in `stock.json`. It should be assumed that the starting quantity for these is 0.
+  [ ] Functionality can be split into many files to help keep the project clear and organised 
