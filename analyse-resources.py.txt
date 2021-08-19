@@ -30,6 +30,7 @@ $ python
 
 
 
+>>> # Getting all transactions in a dictionary
 >>> for tx in t:          
 ...     sku = tx['sku']   
 ...     qty = tx['qty'] 
@@ -39,3 +40,13 @@ $ python
 ...     else:
 ...             transactions[sku] = [(qty, type)]     
 ...      
+
+>>> # Getting all initial stock values in a dictionary
+>>> stock = { sx['sku']: sx['stock'] for sx in s }
+
+
+>>> # Checking manually 
+>>> transactions['LTV719449/39/39']
+[(10, 'refund'), (7, 'order'), (5, 'order'), (1, 'order'), (9, 'order'), (7, 'order'), (5, 'order'), (0, 'order'), (9, 'refund')]
+>>> stock['LTV719449/39/39']                                           
+8525
