@@ -96,6 +96,7 @@ describe('StockService', () => {
     });
 
     it('must throw an error where the SKU does not exist in the `transactions.json` and `stock.json` file', async (done) => {
+      console.warn('POSSIBLE IMPROVEMENT: It seems I have used a deprecated way of checking errors in unit tests');
       const targetSku = 'GANDALF/MY/SKU/DOESNT/EXIST';
       try {
         await stockService.getStockLevel(targetSku);

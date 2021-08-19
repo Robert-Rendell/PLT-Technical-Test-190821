@@ -6,10 +6,7 @@ export class Stock {
    */
   static StartingQuantity = 0;
 
-  public sku: string;
-  public stock = Stock.StartingQuantity;
-
-  constructor(sku: string, stock: number) {
+  constructor(public sku: string, public stock: number = Stock.StartingQuantity) {
     this.sku = sku;
     this.stock = stock;
   }
