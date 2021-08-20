@@ -1,4 +1,4 @@
-import Container, { Service } from 'typedi';
+import { Service } from 'typedi';
 import { SkuDoesNotExistError } from '../errors/sku-does-not-exist';
 
 import { IStockLevelCalculator } from "../interfaces/stock-level-calculator.interface";
