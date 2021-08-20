@@ -20,19 +20,15 @@ export class StockService implements IStockLevelCalculator {
    * Takes a SKU input and returns a StockLevel object containing the current quantity of that sku
    */
   public async getStockLevel(sku: string): Promise<StockLevel> {
+    const appConfig: ApplicationConfig = this.configService.getApplicationConfig();
     const stockLevel: StockLevel = {
-      qty: 0,
+      qty: Stock.StartingQuantity,
       sku,
     };
-
-    // this.configService = Container.get(ConfigService);
-    // this.resourceService = Container.get(ResourceService);
-    const appConfig: ApplicationConfig = this.configService.getApplicationConfig();
 
     // REQUIREMENT - must read from the `stock` and `transactions` files on each invocation (totals cannot be precomputed)
     const initialStockRaw = this.resourceService.getTextFromFile(appConfig.stockFile);
     const transactionsRaw = this.resourceService.getTextFromFile(appConfig.transactionsFile);
-
     const initialStock: Stock[] = JSON.parse(initialStockRaw);
     const transactions: Transaction[] = JSON.parse(transactionsRaw);
   
@@ -47,23 +43,28 @@ export class StockService implements IStockLevelCalculator {
     stockLevel.qty = initialStockForSku?.stock || Stock.StartingQuantity;
   
     // assuming the transactions are in order in the transactions.json:
-    transactions.forEach((t: Transaction) => {
-      if (t.sku === sku) {
-        switch (t.type) {
-          case TransactionType.Order:
-            stockLevel.qty -= t.qty;
-            break;
-          case TransactionType.Refund:
-            if (this.configService.featuresEnabled().restockOnRefund) {
-              stockLevel.qty += t.qty;
-            }
-            break;
-          default:
-            console.error(`Unmapped transaction type ${t.type}`)
-        }
-      }
-    });
+    transactions.forEach((t: Transaction) => this.actionTransaction(t, sku, stockLevel));
 
     return stockLevel;
+  }
+
+  /**
+   * Mutator method - mutates stockLevel concrete object
+   */
+  private actionTransaction(t: Transaction, sku: string, stockLevel: StockLevel): void {
+    if (t.sku === sku) {
+      switch (t.type) {
+        case TransactionType.Order:
+          stockLevel.qty -= t.qty;
+          break;
+        case TransactionType.Refund:
+          if (this.configService.featuresEnabled().restockOnRefund) {
+            stockLevel.qty += t.qty;
+          }
+          break;
+        default:
+          console.error(`Unmapped transaction type ${t.type}`)
+      }
+    }
   }
 }
