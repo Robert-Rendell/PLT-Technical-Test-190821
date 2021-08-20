@@ -1,6 +1,8 @@
+import 'reflect-metadata';
 import { Container } from "typedi";
-import { ResourceService } from "./src/services/resource.service";
 import { StockService } from "./src/services/stock.service";
+
+Container.reset();
 
 /**
  * Desired input
@@ -8,11 +10,13 @@ import { StockService } from "./src/services/stock.service";
 const targetSku = 'LTV719449/39/39';
 
 (async () => {
-  ResourceService.TRANSACTIONS = "./resources/transactions.json";
-  ResourceService.STOCK = "./resources/stock.json";
-
+  let failed = false;
   const stockService = Container.get(StockService);
-  const stockLevel = await stockService.getStockLevel(targetSku);
+  const stockLevel = await stockService.getStockLevel(targetSku)
+                                       .catch((e) => { 
+                                         console.error("Error: " + e.message);
+                                         failed = true; 
+                                       });
   
-  console.log(`Stock level for SKU (${targetSku}) is: ${stockLevel.qty}`)
+  if (!failed) console.log(`Stock level for SKU (${targetSku}) is: ${stockLevel?.qty}`)
 })();

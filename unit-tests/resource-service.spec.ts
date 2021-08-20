@@ -3,11 +3,6 @@ import { ResourceService } from "../src/services/resource.service";
 describe('ResourceService', () => {
   let resourceService: ResourceService;
 
-  beforeAll(() => {
-    ResourceService.TRANSACTIONS = "./resources/transactions.json";
-    ResourceService.STOCK = "./resources/stock.json";
-  });
-
   beforeEach(() => {
     resourceService = new ResourceService();
   });
@@ -18,12 +13,12 @@ describe('ResourceService', () => {
 
   describe('getTextFromFile', () => {
     it('should get the transactions json string', () => {
-      const actual = resourceService.getTextFromFile(ResourceService.TRANSACTIONS);
+      const actual = resourceService.getTextFromFile("transactions.json");
       expect(actual.length).toEqual(54129);
     });
 
     it('should get the stock json string', () => {
-      const actual = resourceService.getTextFromFile(ResourceService.STOCK);
+      const actual = resourceService.getTextFromFile("stock.json");
       expect(actual.length).toEqual(3889);
     });
   });

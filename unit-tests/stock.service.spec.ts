@@ -3,6 +3,7 @@ import { ConfigService } from "../src/services/config.service";
 import { StockService } from "../src/services/stock.service";
 import { mock, instance, when, verify } from 'ts-mockito';
 import { ResourceService } from "../src/services/resource.service";
+import { Features } from "../src/models/features";
 
 describe('StockService', () => {
   let stockService: StockService;
@@ -11,18 +12,19 @@ describe('StockService', () => {
     mockResourceService: ResourceService,
   };
 
-  beforeAll(() => {
-    ResourceService.TRANSACTIONS = "./resources/transactions.json";
-    ResourceService.STOCK = "./resources/stock.json";
-  });
-
   const mockDependencies = () => {
     dependencies = {
       mockConfigService: mock(ConfigService),
       mockResourceService: new ResourceService() // POSSIBLE IMPROVEMENT - mock out fully
     }
-    when(dependencies.mockConfigService.featuresEnabled()).thenReturn({
+    const mockFeatures: Features = {
       restockOnRefund: true,
+    };
+    when(dependencies.mockConfigService.featuresEnabled()).thenReturn(mockFeatures);
+    when(dependencies.mockConfigService.getApplicationConfig()).thenReturn({
+      featuresEnabled: mockFeatures,
+      stockFile: 'stock.json',
+      transactionsFile: 'transactions.json',
     });
   }
 

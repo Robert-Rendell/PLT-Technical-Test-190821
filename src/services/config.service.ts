@@ -1,4 +1,5 @@
 import { Service } from "typedi";
+import { ApplicationConfig } from "../models/application-config";
 import { Features } from "../models/features";
 
 @Service()
@@ -11,5 +12,13 @@ export class ConfigService {
     return {
       restockOnRefund: true,
     };
+  }
+
+  public getApplicationConfig(): ApplicationConfig {
+    return {
+      featuresEnabled: this.featuresEnabled(),
+      transactionsFile: 'transactions.json',
+      stockFile: 'stock.json',
+    }
   }
 }

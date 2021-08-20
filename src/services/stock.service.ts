@@ -1,4 +1,4 @@
-import { Service } from 'typedi';
+import Container, { Service } from 'typedi';
 import { SkuDoesNotExistError } from '../errors/sku-does-not-exist';
 
 import { IStockLevelCalculator } from "../interfaces/stock-level-calculator.interface";
@@ -7,6 +7,7 @@ import { Stock } from '../models/stock';
 import { Transaction, TransactionType } from '../models/transaction';
 import { ConfigService } from './config.service';
 import { ResourceService } from './resource.service';
+import { ApplicationConfig } from '../models/application-config';
 
 @Service()
 export class StockService implements IStockLevelCalculator {
@@ -24,9 +25,13 @@ export class StockService implements IStockLevelCalculator {
       sku,
     };
 
+    // this.configService = Container.get(ConfigService);
+    // this.resourceService = Container.get(ResourceService);
+    const appConfig: ApplicationConfig = this.configService.getApplicationConfig();
+
     // REQUIREMENT - must read from the `stock` and `transactions` files on each invocation (totals cannot be precomputed)
-    const initialStockRaw = this.resourceService.getTextFromFile(ResourceService.STOCK);
-    const transactionsRaw = this.resourceService.getTextFromFile(ResourceService.TRANSACTIONS);
+    const initialStockRaw = this.resourceService.getTextFromFile(appConfig.stockFile);
+    const transactionsRaw = this.resourceService.getTextFromFile(appConfig.transactionsFile);
 
     const initialStock: Stock[] = JSON.parse(initialStockRaw);
     const transactions: Transaction[] = JSON.parse(transactionsRaw);
