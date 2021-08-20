@@ -27,8 +27,6 @@ for a in s:
 print(f"Possible set of stock unique keys: {stock_keys}")
 # {'sku', 'stock'}
 
-
-
 # Getting all transactions in a dictionary
 transactions = {}
 
@@ -45,8 +43,11 @@ for tx in t:
 stock = { sx['sku']: sx['stock'] for sx in s }
 
 
-# Checking manually (+ for refund, - for order)
-print(f"transactions['LTV719449/39/39'] = {transactions['LTV719449/39/39']}")
-# [(10, 'refund'), (7, 'order'), (5, 'order'), (1, 'order'), (9, 'order'), (7, 'order'), (5, 'order'), (0, 'order'), (9, 'refund')]
-print(f"stock['LTV719449/39/39'] = {stock['LTV719449/39/39']}")                                           
-# 8525
+def check_sku_manually(sku):
+  # Checking manually (+ for refund, - for order)
+  print(f"transactions['{sku}'] = {transactions[sku]}")
+  # [(10, 'refund'), (7, 'order'), (5, 'order'), (1, 'order'), (9, 'order'), (7, 'order'), (5, 'order'), (0, 'order'), (9, 'refund')]
+  print(f"Initial stock value / stock['{sku}'] = {stock[sku]}")                                           
+  # 8525
+
+check_sku_manually('LTV719449/39/39')
