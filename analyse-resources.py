@@ -42,6 +42,11 @@ def setup():
 
   # Getting all initial stock values in a dictionary
   stock = { sx['sku']: sx['stock'] for sx in s }
+
+  print(f"All SKUs (transactions): {transactions.keys()}")
+  print(f"All SKUs (stocks): {stock.keys()}")
+  print(f"Stock SKU length = {len(stock.keys())} vs. transaction SKU length = {len(transactions.keys())}")
+  print(f"Transactions without initial stock = {set(transactions.keys()).difference(set(stock.keys()))}")
   return transactions, stock
 
 def calculate_totals(transactions, sku):
@@ -66,11 +71,12 @@ def check_sku_manually(sku):
   global transactions
   global stock
   print(f"==== Checking {sku} ====")
+  stock_sku = stock.get(sku) or 0
   # eg. LTV719449/39/39
   # Checking manually (+ for refund, - for order)
   print(f"transactions['{sku}'] = {transactions[sku]}")
   # eg. [(10, 'refund'), (7, 'order'), (5, 'order'), (1, 'order'), (9, 'order'), (7, 'order'), (5, 'order'), (0, 'order'), (9, 'refund')]
-  print(f"Initial stock value / stock['{sku}'] = {stock[sku]}")                                           
+  print(f"Initial stock value / stock['{sku}'] = {stock_sku}")                                           
   # eg. 8525
   total_refund = 0
   total_order = 0
@@ -78,7 +84,8 @@ def check_sku_manually(sku):
   total_order, total_refund, others = calculate_totals(transactions, sku)
   print(f"Totals for orders: {total_order}")
   print(f"Totals for refunds: {total_refund}")
-  print(f"Grand total: {stock[sku]} - {total_order} + {total_refund} = {stock[sku]- total_order + total_refund}")
+  print(f"Grand total (with refunds): {stock_sku} - {total_order} + {total_refund} = {stock_sku - total_order + total_refund}")
+  print(f"Grand total (without refunds): {stock_sku} - {total_order} = {stock_sku - total_order}")
 
 def main():
   global transactions
@@ -87,6 +94,7 @@ def main():
   skus_to_check = [
     'LTV719449/39/39',
     'SXV420098/71/68',
+    'NJL093603/01/73',
   ]
   transactions, stock = setup()
 

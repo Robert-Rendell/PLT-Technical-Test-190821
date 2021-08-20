@@ -28,6 +28,16 @@ describe('StockService', () => {
     });
   }
 
+  const disableRestockOnRefund = () => {
+    when(dependencies.mockConfigService.getFeatureFlags()).thenReturn({
+      restockOnRefund: false,
+    });
+    stockService = new StockService(
+      instance(dependencies.mockConfigService),
+      dependencies.mockResourceService,
+    );
+  }
+
   beforeEach(() => {
     mockDependencies();
     stockService = new StockService(
@@ -67,13 +77,7 @@ describe('StockService', () => {
     it('should count the current stock for a given sku when refunds are not restocked', async () => {
       const targetSku = 'LTV719449/39/39';
       const expectedResult = 8491;
-      when(dependencies.mockConfigService.getFeatureFlags()).thenReturn({
-        restockOnRefund: false,
-      });
-      stockService = new StockService(
-        instance(dependencies.mockConfigService),
-        dependencies.mockResourceService,
-      );
+      disableRestockOnRefund();
       /**
        * Manually checking
        * 8525
@@ -124,7 +128,44 @@ describe('StockService', () => {
     });
 
     describe('checking individual skus', () => {
-      it('')
+      it('SXV420098/71/68', async () => {
+        const targetSku = 'SXV420098/71/68';
+        const expectedStockLevel: StockLevel = {
+          sku: targetSku,
+          qty: 706,
+        };
+
+        const actual: StockLevel = await stockService.getStockLevel(targetSku);
+
+        expect(actual).toEqual(expectedStockLevel);
+      });
+
+      it('NJL093603/01/73 - transaction without initial stock value (restockOnRefund feature enabled)', async () => {
+        pending('This test fails due to stock levels not being high enough for demand (-56). Speak to Product owner. We could implement a safety check for this but it is currently not part of the acceptance criteria');
+        const targetSku = 'NJL093603/01/73';
+        const expectedStockLevel: StockLevel = {
+          sku: targetSku,
+          qty: 0, // Fails because it is -56
+        }
+
+        const actual: StockLevel = await stockService.getStockLevel(targetSku);
+
+        expect(actual).toEqual(expectedStockLevel);
+      });
+
+      it('NJL093603/01/73 - transaction without initial stock value (restockOnRefund feature disabled)', async () => {
+        pending('This test fails due to stock levels not being high enough for demand (-87). Speak to Product owner. We could implement a safety check for this but it is currently not part of the acceptance criteria');
+        disableRestockOnRefund()
+        const targetSku = 'NJL093603/01/73';
+        const expectedStockLevel: StockLevel = {
+          sku: targetSku,
+          qty: 0, // Fails because it's -87
+        }
+
+        const actual: StockLevel = await stockService.getStockLevel(targetSku);
+
+        expect(actual).toEqual(expectedStockLevel);
+      });
     })
   });
 });

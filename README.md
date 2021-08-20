@@ -15,12 +15,12 @@
  
 
 # Technical Test 
-User story:
+## User story:
 - As an interviewer I want a function which is able to:
   - return the current stock levels for a given SKU
     (by combining the data in these two files).
 
-Requirements:
+## Requirements:
   [x] must match the following signature: `(sku: string) => Promise<{ sku: string, qty: number }>`.
   [x] must read from the `stock` and `transactions` files on each invocation (totals cannot be precomputed)
   [x] must throw an error where the SKU does not exist in the `transactions.json` and `stock.json` file
@@ -34,3 +34,19 @@ Ambiguity (questions for product owner / business analyst):
               - for the sake of this technical test I have assumed the product owner has
                 given sign off for refunds to be added back into the stock
                 but with the added benefit of a feature flag
+
+## Issues with technical test:
+It’s worth noting that through more thorough unit testing I discovered an issue with the technical test:
+
+It's due to stock levels not being high enough for demand. 
+In this situation I'd speak to Product owner. 
+We could implement a safety check for this but it is currently not part of the acceptance criteria
+
+The issue can be seen with this SKU id:
+==== Checking NJL093603/01/73 ====
+transactions['NJL093603/01/73'] = [(1, 'order'), (4, 'order'), (4, 'order'), (10, 'refund'), (6, 'order'), (9, 'refund'), (7, 'order'), (8, 'order'), (0, 'refund'), (8, 'order'), (9, 'refund'), (9, 'order'), (9, 'order'), (3, 'refund'), (4, 'order'), (7, 'order'), (10, 'order'), (10, 'order')]
+Initial stock value / stock['NJL093603/01/73'] = 0
+Totals for orders: 87
+Totals for refunds: 31
+Grand total (with refunds): 0 - 87 + 31 = -56
+Grand total (without refunds): 0 - 87 = -87
