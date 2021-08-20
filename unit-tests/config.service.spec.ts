@@ -19,7 +19,7 @@ describe('ConfigService', () => {
         restockOnRefund: true,
       };
 
-      const actual = configService.featuresEnabled();
+      const actual = configService.getFeatureFlags();
 
       expect(actual).toEqual(expected);
     });
@@ -30,10 +30,10 @@ describe('ConfigService', () => {
       const expected: Features = {
         restockOnRefund: false,
       }
-      configService.setEnabledFeatures({
+      configService.setFeatureFlags({
         restockOnRefund: false,
       });
-      expect(configService.featuresEnabled()).toEqual(expected);
+      expect(configService.getFeatureFlags()).toEqual(expected);
     });
 
     it('should also set application config', () => {
@@ -44,7 +44,7 @@ describe('ConfigService', () => {
         stockFile: 'stock.json',
         transactionsFile: 'transactions.json',
       }
-      configService.setEnabledFeatures({
+      configService.setFeatureFlags({
         restockOnRefund: false,
       });
       expect(configService.getApplicationConfig()).toEqual(expected);

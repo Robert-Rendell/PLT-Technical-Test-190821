@@ -20,7 +20,7 @@ describe('StockService', () => {
     const mockFeatures: Features = {
       restockOnRefund: true,
     };
-    when(dependencies.mockConfigService.featuresEnabled()).thenReturn(mockFeatures);
+    when(dependencies.mockConfigService.getFeatureFlags()).thenReturn(mockFeatures);
     when(dependencies.mockConfigService.getApplicationConfig()).thenReturn({
       featuresEnabled: mockFeatures,
       stockFile: 'stock.json',
@@ -67,7 +67,7 @@ describe('StockService', () => {
     it('should count the current stock for a given sku when refunds are not restocked', async () => {
       const targetSku = 'LTV719449/39/39';
       const expectedResult = 8491;
-      when(dependencies.mockConfigService.featuresEnabled()).thenReturn({
+      when(dependencies.mockConfigService.getFeatureFlags()).thenReturn({
         restockOnRefund: false,
       });
       stockService = new StockService(
@@ -119,7 +119,7 @@ describe('StockService', () => {
 
       await stockService.getStockLevel(targetSku);
 
-      verify(dependencies.mockConfigService.featuresEnabled()).called();
+      verify(dependencies.mockConfigService.getFeatureFlags()).called();
       expect().nothing();
     });
 

@@ -21,7 +21,7 @@ export class ConfigService {
     }
   }
 
-  public featuresEnabled(): Features {
+  public getFeatureFlags(): Features {
     return this.appConfig.featuresEnabled;
   }
 
@@ -29,7 +29,11 @@ export class ConfigService {
     return this.appConfig;
   }
 
-  public setEnabledFeatures(features: Features): void {
+  /**
+   * Setting flags to 'True' means they are enabled.
+   * 'False' means the feature is disabled
+   */
+  public setFeatureFlags(features: Features): void {
     this.appConfig.featuresEnabled = features;
   }
 }

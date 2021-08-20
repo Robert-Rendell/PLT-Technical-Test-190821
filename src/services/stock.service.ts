@@ -58,7 +58,7 @@ export class StockService implements IStockLevelCalculator {
           stockLevel.qty -= t.qty;
           break;
         case TransactionType.Refund:
-          if (this.configService.featuresEnabled().restockOnRefund) {
+          if (this.configService.getFeatureFlags().restockOnRefund) {
             stockLevel.qty += t.qty;
           }
           break;
