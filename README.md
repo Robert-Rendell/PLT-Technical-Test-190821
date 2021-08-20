@@ -43,6 +43,7 @@ In this situation I'd speak to Product owner.
 We could implement a safety check for this but it is currently not part of the acceptance criteria
 
 The issue can be seen with this SKU id:
+```
 ==== Checking NJL093603/01/73 ====
 transactions['NJL093603/01/73'] = [(1, 'order'), (4, 'order'), (4, 'order'), (10, 'refund'), (6, 'order'), (9, 'refund'), (7, 'order'), (8, 'order'), (0, 'refund'), (8, 'order'), (9, 'refund'), (9, 'order'), (9, 'order'), (3, 'refund'), (4, 'order'), (7, 'order'), (10, 'order'), (10, 'order')]
 Initial stock value / stock['NJL093603/01/73'] = 0
@@ -50,9 +51,11 @@ Totals for orders: 87
 Totals for refunds: 31
 Grand total (with refunds): 0 - 87 + 31 = -56
 Grand total (without refunds): 0 - 87 = -87
+```
 
 I did, however, implement a little check and you can see it in the program output:
 
+```
 > robert-rendell-technical-test-190821@1.0.0 start C:\Users\rob_4\Desktop\Robert-Rendell-PLT-Technical-Test-190821
 > ts-node index.ts
 
@@ -61,6 +64,7 @@ SKU NJL093603/01/73 stock level dropped below 0
 SKU NJL093603/01/73 stock level dropped below 0
 SKU NJL093603/01/73 stock level dropped below 0
 Stock level for SKU (NJL093603/01/73) is: -56
+```
 
 # Improvements to my code
 There are currently 4 possible improvements (IMOO):
