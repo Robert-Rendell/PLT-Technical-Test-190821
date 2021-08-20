@@ -31,9 +31,9 @@ This runs eslint against my project
 - [x] Functionality can be split into many files to help keep the project clear and organised 
 - [x] all code adequately unit tested
 
-Ambiguity (questions for product owner / business analyst):
-- [x] refunds 
-  - in the transactions.json there are refunds and orders
+# Ambiguity (questions for product owner / business analyst):
+- Refunds add to stock?
+  - in the transactions.json there are refunds and orders for transaction type
   - should refunds be added back into the stock?
   - for the sake of this technical test I have assumed the product owner has
     given sign off for refunds to be added back into the stock
