@@ -4,14 +4,17 @@
   `npm i`
 
 # Running the project
-  `npm start`
-- This will run index.ts which is configured using the index.ts module level variable "targetSku"
+## Demo 
+`npm start`
+This will run index.ts which is configured using the index.ts module level variable "targetSku"
+  
+## Unit tests
+`npm test`
+This will run the unit tests for the project
 
-  `npm test`
-- This will run the unit tests for the project
-
-  `npm run lint`
-- This runs eslint against my project
+## Linting
+`npm run lint`
+This runs eslint against my project
  
 
 # Technical Test 
