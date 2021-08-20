@@ -9,17 +9,27 @@ import { Features } from "../models/features";
 
 @Service()
 export class ConfigService {
-  public featuresEnabled(): Features {
-    return {
-      restockOnRefund: true,
-    };
-  }
+  private appConfig: ApplicationConfig;
 
-  public getApplicationConfig(): ApplicationConfig {
-    return {
-      featuresEnabled: this.featuresEnabled(),
+  constructor() {
+    this.appConfig = {
+      featuresEnabled: {
+        restockOnRefund: true,
+      },
       transactionsFile: 'transactions.json',
       stockFile: 'stock.json',
     }
+  }
+
+  public featuresEnabled(): Features {
+    return this.appConfig.featuresEnabled;
+  }
+
+  public getApplicationConfig(): ApplicationConfig {
+    return this.appConfig;
+  }
+
+  public setEnabledFeatures(features: Features): void {
+    this.appConfig.featuresEnabled = features;
   }
 }

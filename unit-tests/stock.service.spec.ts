@@ -122,5 +122,9 @@ describe('StockService', () => {
       verify(dependencies.mockConfigService.featuresEnabled()).called();
       expect().nothing();
     });
+
+    describe('checking individual skus', () => {
+      it('')
+    })
   });
 });
