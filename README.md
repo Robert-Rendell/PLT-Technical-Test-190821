@@ -50,3 +50,23 @@ Totals for orders: 87
 Totals for refunds: 31
 Grand total (with refunds): 0 - 87 + 31 = -56
 Grand total (without refunds): 0 - 87 = -87
+
+I did, however, implement a little check and you can see it in the program output:
+
+> robert-rendell-technical-test-190821@1.0.0 start C:\Users\rob_4\Desktop\Robert-Rendell-PLT-Technical-Test-190821
+> ts-node index.ts
+
+The program will add refunds back into the sellable stock
+SKU NJL093603/01/73 stock level dropped below 0
+SKU NJL093603/01/73 stock level dropped below 0
+SKU NJL093603/01/73 stock level dropped below 0
+Stock level for SKU (NJL093603/01/73) is: -56
+
+# Improvements to my code
+There are currently 4 possible improvements (IMOO):
+- use envalid/dotenv to populate ApplicationConfig in config.service.ts
+- use async / await version of read file from 'fs' node built in package in resource.service.ts
+- mock out ResourceService fully in stock.service.ts
+- fix deprecated use of doneFn in stock.service.spec.ts
+
+I'm open to more suggestions, code reviews are always a school day! 

@@ -4,22 +4,21 @@ import { ConfigService } from './src/services/config.service';
 import { StockService } from "./src/services/stock.service";
 
 /**
- * Desired SKU input
+ * Desired SKU user input
  */
 const targetSku = 'LTV719449/39/39';
 
-const configService = Container.get(ConfigService);
-configService.setFeatureFlags({
-  restockOnRefund: true, // Set this to false if you don't want refunds to be added back into the resellable stock
-});
-
-if (configService.getFeatureFlags().restockOnRefund) {
-  console.log('The program will add refunds back into the sellable stock')
-} else {
-  console.log('The program will NOT add refunds back into the sellable stock')
-}
+// --------------------------------------------------------------
+console.log(`The target SKU is "${targetSku}". You can change this index.ts -> "targetSku" variable`);
 
 (async () => {
+  const configService = Container.get(ConfigService);
+  configService.setFeatureFlags({
+    restockOnRefund: true, // Set this to false if you don't want refunds to be added back into the resellable stock
+  });
+
+  configService.logFeatures();
+
   let failed = false;
   const stockService = Container.get(StockService);
   const stockLevel = await stockService.getStockLevel(targetSku)
@@ -28,5 +27,5 @@ if (configService.getFeatureFlags().restockOnRefund) {
                                          failed = true; 
                                        });
   
-  if (!failed) console.log(`Stock level for SKU (${targetSku}) is: ${stockLevel?.qty}`)
+  if (!failed) console.log(`Stock level for SKU (${targetSku}) is: ${stockLevel?.qty}`);
 })();

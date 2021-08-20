@@ -11,7 +11,7 @@ describe('ConfigService', () => {
 
   it('should be defined', () => {
     expect(configService).toBeDefined();
-  })
+  });
 
   describe('featuresEnabled', () => {
     it('should return a default value', () => {
@@ -29,7 +29,7 @@ describe('ConfigService', () => {
     it('should set', () => {
       const expected: Features = {
         restockOnRefund: false,
-      }
+      };
       configService.setFeatureFlags({
         restockOnRefund: false,
       });
@@ -43,7 +43,7 @@ describe('ConfigService', () => {
         },
         stockFile: 'stock.json',
         transactionsFile: 'transactions.json',
-      }
+      };
       configService.setFeatureFlags({
         restockOnRefund: false,
       });

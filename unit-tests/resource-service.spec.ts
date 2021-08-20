@@ -9,7 +9,7 @@ describe('ResourceService', () => {
 
   it('should be defined', () => {
     expect(resourceService).toBeDefined();
-  })
+  });
 
   describe('getTextFromFile', () => {
     it('should get the transactions json string', () => {

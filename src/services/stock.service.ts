@@ -32,7 +32,7 @@ export class StockService implements IStockLevelCalculator {
     const initialStock: Stock[] = JSON.parse(initialStockRaw);
     const transactions: Transaction[] = JSON.parse(transactionsRaw);
   
-    const initialStockForSku: Stock | undefined = initialStock.find((s: Stock) => s.sku === sku)
+    const initialStockForSku: Stock | undefined = initialStock.find((s: Stock) => s.sku === sku);
 
     // REQUIREMENT - must throw an error where the SKU does not exist in the `transactions.json` and `stock.json` file
     const isInTransactions = Boolean(transactions.find((t: Transaction) => t.sku === sku));
@@ -52,6 +52,7 @@ export class StockService implements IStockLevelCalculator {
    * Mutator method - mutates stockLevel concrete object
    */
   private actionTransaction(t: Transaction, sku: string, stockLevel: StockLevel): void {
+    const previousQty = stockLevel.qty;
     if (t.sku === sku) {
       switch (t.type) {
         case TransactionType.Order:
@@ -63,7 +64,10 @@ export class StockService implements IStockLevelCalculator {
           }
           break;
         default:
-          console.error(`Unmapped transaction type ${t.type}`)
+          console.error(`Unmapped transaction type ${t.type}`);
+      }
+      if (previousQty >= 0 && stockLevel.qty < 0) {
+        console.warn(`SKU ${sku} stock level dropped below 0`);
       }
     }
   }

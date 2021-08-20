@@ -18,7 +18,7 @@ export class ConfigService {
       },
       transactionsFile: 'transactions.json',
       stockFile: 'stock.json',
-    }
+    };
   }
 
   public getFeatureFlags(): Features {
@@ -35,5 +35,13 @@ export class ConfigService {
    */
   public setFeatureFlags(features: Features): void {
     this.appConfig.featuresEnabled = features;
+  }
+
+  public logFeatures(): void {
+    if (this.getFeatureFlags().restockOnRefund) {
+      console.log('[FEATURE ENABLED: restockOnRefund] - The program will add refunds back into the sellable stock');
+    } else {
+      console.log('The program will NOT add refunds back into the sellable stock');
+    }
   }
 }
